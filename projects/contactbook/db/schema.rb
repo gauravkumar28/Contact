@@ -11,22 +11,35 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150724121010) do
+ActiveRecord::Schema.define(:version => 20150724220837) do
 
   create_table "contacts", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "name"
-    t.string   "phone"
   end
-
-  add_index "contacts", ["phone"], :name => "index_contacts_on_phone"
 
   create_table "emails", :force => true do |t|
     t.string   "email_url"
+    t.string   "contact_id"
+    t.string   "integer"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "contact_id"
+  end
+
+  create_table "people", :force => true do |t|
+    t.string   "name"
+    t.string   "contact_id"
+    t.string   "integer"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "phones", :force => true do |t|
+    t.integer  "phonenumber"
+    t.string   "contact_id"
+    t.string   "integer"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
 end

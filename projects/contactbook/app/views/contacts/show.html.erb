@@ -6,11 +6,11 @@
       <table class="table table-hover">
 		    <tr>
 		      <td><strong> Name</strong></td>
-		      <td><%=@contact.name%></td>
+		      <td><%=@contact.persons.pluck(:name).join(",")%></td>
 		    </tr>
 		    <tr>
 		      <td><strong> Phone: </strong></td>
-		      <td><%= @contact.phone %></td>
+		      <td><%= @contact.phones.pluck(:phonenumber).join(",") %></td>
 		    </tr>
 		    <tr>
 		      <td><strong> Emails: </strong></td>
@@ -18,10 +18,7 @@
 		    </tr>
       </table>
     </div>
-  <div class="col-sm-3">
-    <%= button_to "edit", edit_contact_path(@contact), method: :get, class: "btn btn-primary" %>
-  </div>
-  <div class="col-sm-3">
+  <div class="col-sm-6">
     <%= button_to "delete", contact_path, method: :delete, class: "btn btn-primary" %>
   </div>
 </div>

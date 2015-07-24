@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   
   def index
-      @contacts = Contact.search(params[:search])
+      @contacts = Contact.paginate(:page => params[:page], :per_page => 10)
   end
 
   def show
@@ -10,30 +10,41 @@ class ContactsController < ApplicationController
 
   def new
     @contact = Contact.new
-    @contact.emails.new
+    @contact.emails.build
+    @contact.persons.build
+    @contact.phones.build
   end
 
   def create
-    email = params[:contact][:email]
-    @contact = Contact.find_by_phone(params[:contact][:phone]) || Contact.new(params[:contact].reject{|k|  k=="email"})
-    @contact.emails.new(email)
+    person = Phone.where(phonenumber: params[:contact][:phone][:phonenumber]).first
+    if person
+      @contact = person.contact
+      @contact.emails.new(params[:contact][:email])
+      @contact.persons.new(params[:contact][:person])
+     end
+     person = Person.where(name: params[:contact][:person][:name]).first
+    if person
+      @contact = person.contact
+      @contact.emails.new(params[:contact][:email])
+      @contact.phones.new(params[:contact][:phone])
+     end
+     email = Email.where(email_url: params[:contact][:email][:email_url]).first 
+    if email
+      @contact = email.contact
+      @contact.phones.new(params[:contact][:phone])
+      @contact.persons.new(params[:contact][:person])
+    end
+    unless @contact 
+      @contact = Contact.new()
+      @contact.emails.new(params[:contact][:email])
+      @contact.persons.new(params[:contact][:person])
+      @contact.phones.new(params[:contact][:phone])  
+    end
+
     if @contact.save!
       redirect_to contact_path(@contact)
     else
       render 'new'
-    end
-  end
-
-  def edit
-    @contact = Contact.find(params[:id])
-  end
-
-  def update
-    @contact = Contact.find(params[:id])
-    if @contact.update_attributes(feature_params)
-      redirect_to contact_path(@contact)
-    else
-      render 'edit'
     end
   end
 

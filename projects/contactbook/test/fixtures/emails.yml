@@ -2,6 +2,10 @@
 
 one:
   email_url: MyString
+  contact_id: MyString
+  integer: MyString
 
 two:
   email_url: MyString
+  contact_id: MyString
+  integer: MyString
